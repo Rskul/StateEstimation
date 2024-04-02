@@ -1,15 +1,17 @@
-# Import numpy
+#Importing numpy and xml parser
 import numpy as np
 import xml.etree.ElementTree as ET
 
+#Importing data into code
+#DV - dataset with Different variance
+#SV - dataset with Constatn variance
+#OUT - dataset containing outliers
+treeDV = ET.parse('measurements_nooutlier_differentvar.xml')
+DataDV = treeDV.getroot()
+treeSV = ET.parse('measurements_nooutlier_differentvar.xml')
+DataSV = treeSV.getroot()
+treeOUT = ET.parse('measurements_nooutlier_differentvar.xml')
+DataOUT = treeOUT.getroot()
 
-#123456789
-a = 1010
-print (a)
-
-treeDiffVar = ET.parse('measurements_nooutlier_differentvar.xml')
-DataDiffVar = tree.getroot()
-treeSameVar = ET.parse('measurements_nooutlier_differentvar.xml')
-DataSameVar = tree.getroot()
-treeOutlier = ET.parse('measurements_nooutlier_differentvar.xml')
-DataOutlier = tree.getroot()
+a = float(DataSV[0][0].text)
+print(a)
