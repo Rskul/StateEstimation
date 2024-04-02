@@ -13,5 +13,5 @@ DataSV = treeSV.getroot()
 treeOUT = ET.parse('measurements_nooutlier_differentvar.xml')
 DataOUT = treeOUT.getroot()
 
-a = float(DataSV[0][0].text)
+a = float(DataSV[1][0].text)
 print(a)
