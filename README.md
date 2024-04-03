@@ -15,4 +15,4 @@ To DO:
   - comparason of EKF and UKF
 - Graphical output for data (graf estimated variables)
 - rewrite code so aditional measurements and variables cam be easily added
-- Create test data to test EFK and future filters
+- Create test data to test EKF and future filters
