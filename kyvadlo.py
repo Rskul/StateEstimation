@@ -1,5 +1,7 @@
-#Importing numpy and xml parser
+#Imports
 import numpy as np
+import scipy as sp
+from pykalman import KalmanFilter
 import xml.etree.ElementTree as ET
 
 #Importing data into code
