@@ -1,16 +1,16 @@
 # Imports
 import xml.etree.ElementTree as ET
 import numpy as np
-from numpy.linalg import inv
-import scipy as sp
-from pykalman import KalmanFilter
-import pandas as pd
+# import scipy as sp
+# from pykalman import KalmanFilter
+# import pandas as pd
 
 # Importing functions from module Func.py
 from Func import KF_xEvol
 from Func import EKF_PTransitionMatrix
 from Func import KF_MeasurementTransformation
 from Func import EKF_LinearizedMeasurementTransformation
+from Func import EKF_KalmanGain
 
 # Importing data into code
 # DV - dataset with Different variance
@@ -33,14 +33,14 @@ q = 0.1
 # time step (constant in this case)
 ts = 0.05
 
+# selecting dataset
+Data = DataOUT
 
 # Definition of initial state and initial covariance
 # Measurement dataSV and dataDV sugests that the pendulum is at maximal displacement so arcsin(1) was chosen as the starting point
-x_init = np.array([np.arcsin(1), 0])
+start = min(1, float(Data[0][1].text))
+x_init = np.array([np.arcsin(start), 0])
 P_init = np.eye(2)
-
-# selecting dataset
-Data = DataSV
 
 # Process noise
 Q = np.array([[q*pow(ts, 3)/3, q*pow(ts, 2)/2], [q*pow(ts, 2)/2, q*ts]])
@@ -59,8 +59,8 @@ P_apri = P_init
 P_post = np.eye(2)
 P_next = np.eye(2)
 
-
-for i in range(101):
+steps = len(Data)
+for i in range(steps):
     # preparing linearized system for evolution of covariance
     F = EKF_PTransitionMatrix(x_init)
     # measurment noise prom data
@@ -76,9 +76,10 @@ for i in range(101):
     # update step
     # updating Jakobian of mesurement predistion
 
+    # Linearized measurement transformation
     H = EKF_LinearizedMeasurementTransformation(x_post)
-    # Kalman gain computation
-    K = (P_post.dot(H.T)) @ np.linalg.inv(H.dot(P_post).dot(H.T) + R)
+    # Kalman gain computation EKF
+    K = EKF_KalmanGain(x_post, P_post, R)
     # Measurements m and predicted measurement h
     m = float(Data[i][1].text)
     h = KF_MeasurementTransformation(x_post)

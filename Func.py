@@ -1,6 +1,4 @@
 import numpy as np
-from numpy.linalg import inv
-import pandas as pd
 
 # Constatns of symple pendulum system
 g = 9.81  # Gravitational constant
@@ -80,11 +78,29 @@ def EKF_LinearizedMeasurementTransformation(x):
 
     Linearization is obtained by calculation of Jakobian. 
 
-    H = (cos(a), 0)
-    
+    H = (cos(a)
+        (  0  )
+
     Input is vector x.
-    Output is 2x1 matrix. (covector)
+    Output is 2x1 matrix.
     """
 
     s = np.cos(float(x[0]))
-    return np.array([[s, 0]])  # 2x1 matrix
+    return np.array([[s, 0]])
+
+
+def EKF_KalmanGain(x, P, R):
+    """
+    Calculate Kalman gain
+
+    Inputs system state x, state covariance matrix P and measurement covariance matrix R
+    Outputs Kallman gain
+
+    K = PH^T / (H^TPH + R)
+
+    Where H is linearised measurement transformation matrix
+    """
+
+    H = EKF_LinearizedMeasurementTransformation(x)
+    return (P.dot(H.T)) @ np.linalg.inv((H).dot(P).dot(H.T) + R)
+
